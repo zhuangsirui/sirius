@@ -46,9 +46,7 @@ func (wd *WebDav) Init() error {
 	}
 
 	wd.HandlerFunc = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		logrus.Debugln("in handler...")
 		username, password, ok := r.BasicAuth()
-		logrus.Debugln(username, password, ok)
 		if !ok || !wd.config.Authenticator.Auth(username, password) {
 			w.Header().Set("WWW-Authenticate", `Basic realm="davfs"`)
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
@@ -66,7 +64,6 @@ func (wd *WebDav) Init() error {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
-		logrus.Info("handler exist")
 		handler.ServeHTTP(w, r)
 	})
 
@@ -89,7 +86,6 @@ func (wd *WebDav) ensureHandler(username string) (handler *webdav.Handler, err e
 }
 
 func (wd *WebDav) initHandler(username string) (*webdav.Handler, error) {
-	logrus.Debugln("initHandler for", username)
 	userDir, err := wd.ensureUserDir(username)
 	if err != nil {
 		return nil, err

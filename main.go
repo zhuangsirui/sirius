@@ -10,7 +10,6 @@ type simpleAuth struct {
 }
 
 func (a simpleAuth) Auth(_, _ string) bool {
-	logrus.Info("auth in")
 	return true
 }
 
