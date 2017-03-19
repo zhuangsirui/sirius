@@ -33,6 +33,12 @@ func TestWebDav(t *testing.T) {
 			})
 			err := wd.Init()
 			So(err, ShouldBeNil)
+
+			Convey("ensure user dir", func() {
+				path, err := wd.ensureUserDir("sirius")
+				So(path, ShouldNotEqual, "")
+				So(err, ShouldBeNil)
+			})
 		})
 	})
 }
