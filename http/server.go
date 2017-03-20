@@ -1,6 +1,7 @@
 package http
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
@@ -10,12 +11,26 @@ import (
 type Server struct {
 	config Config
 	mux    *http.ServeMux
+	server *http.Server
 }
 
 func NewServer(config Config) *Server {
 	return &Server{
 		config: config,
-		mux:    http.DefaultServeMux,
+		mux:    http.NewServeMux(),
+	}
+}
+
+func (s *Server) Init() {
+	logrus.WithFields(logrus.Fields{
+		"service": "http",
+		"ip":      s.config.IP,
+		"port":    s.config.Port,
+	}).Info("serve")
+
+	s.server = &http.Server{
+		Addr:    fmt.Sprintf("%s:%d", s.config.IP, s.config.Port),
+		Handler: s.mux,
 	}
 }
 
@@ -23,28 +38,22 @@ func (s *Server) AddHandlerFunc(path string, handlerFunc http.HandlerFunc) {
 	s.mux.HandleFunc(path, handlerFunc)
 }
 
-func (s *Server) Serve() (err error) {
-	logrus.WithFields(logrus.Fields{
-		"service": "web",
-		"ip":      s.config.IP,
-		"port":    s.config.Port,
-	}).Info("Serve")
-
-	listenAddr := fmt.Sprintf("%s:%d", s.config.IP, s.config.Port)
-
-	err = http.ListenAndServe(listenAddr, s.mux)
-
-	if err != nil {
+func (s *Server) Serve() {
+	if err := s.server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		logrus.WithFields(logrus.Fields{
-			"service": "web",
+			"service": "http",
 			"ip":      s.config.IP,
 			"port":    s.config.Port,
-		}).Error("Can't listen")
+		}).Info("http server stopped")
 		return
 	}
 
 	logrus.WithFields(logrus.Fields{
 		"service": "web",
-	}).Info("Shutdown")
+	}).Info("shutdown")
 	return
+}
+
+func (s *Server) Shutdown(ctx context.Context) {
+	s.server.Shutdown(ctx)
 }

@@ -1,0 +1,17 @@
+[http]
+
+ip = "0.0.0.0"
+port = 8000
+
+[webdav]
+
+prefix = "/dav/"
+root_dir = "/tmp/webdav"
+
+  [[webdav.users]]
+  username = "hello"
+  password = "world"
+
+  [[webdav.users]]
+  username = "world"
+  password = "hello"

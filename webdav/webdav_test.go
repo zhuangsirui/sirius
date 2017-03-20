@@ -18,7 +18,7 @@ func TestWebDav(t *testing.T) {
 
 		Convey("init without authenticate", func() {
 			wd := NewWebDav(Config{
-				Prefix:  "/dav",
+				Prefix:  "/dav/",
 				RootDir: "/tmp/webdav",
 			})
 			err := wd.Init()
@@ -27,7 +27,7 @@ func TestWebDav(t *testing.T) {
 
 		Convey("init", func() {
 			wd := NewWebDav(Config{
-				Prefix:        "/dav",
+				Prefix:        "/dav/",
 				RootDir:       "/tmp/webdav",
 				Authenticator: authenticator{},
 			})
@@ -39,6 +39,17 @@ func TestWebDav(t *testing.T) {
 				So(path, ShouldNotEqual, "")
 				So(err, ShouldBeNil)
 			})
+		})
+
+		Convey("ensure handler", func() {
+			wd := NewWebDav(Config{
+				Prefix:        "/dav/",
+				RootDir:       "/tmp/webdav",
+				Authenticator: authenticator{},
+			})
+			handler, err := wd.ensureHandler("sirius")
+			So(err, ShouldBeNil)
+			So(handler, ShouldNotBeNil)
 		})
 	})
 }

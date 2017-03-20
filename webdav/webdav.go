@@ -31,13 +31,12 @@ func NewWebDav(config Config) *WebDav {
 func (wd *WebDav) Init() error {
 	logrus.WithFields(logrus.Fields{
 		"service": "webdav",
-	}).Info("Init")
+	}).Info("init")
 
 	if wd.config.Authenticator == nil {
 		logrus.WithFields(logrus.Fields{
-			"service":              "webdav",
-			"Config.Authenticator": "not exist",
-		}).Error("Init failed")
+			"service": "webdav",
+		}).Error("webdav init failed, Authenticator not exist")
 		return ErrAuthenticatorNotExist
 	}
 
@@ -88,7 +87,11 @@ func (wd *WebDav) ensureHandler(username string) (handler *webdav.Handler, err e
 func (wd *WebDav) initHandler(username string) (*webdav.Handler, error) {
 	userDir, err := wd.ensureUserDir(username)
 	if err != nil {
-		return nil, err
+		logrus.WithFields(logrus.Fields{
+			"service": "webdav",
+			"error":   err,
+		}).Error("ensure user directory failed")
+		return nil, ErrUserDirInaccessible
 	}
 	fs := webdav.Dir(userDir)
 	handler := &webdav.Handler{
