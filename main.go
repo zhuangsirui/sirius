@@ -6,7 +6,7 @@ import (
 	"os/signal"
 	"sync"
 
-	"github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 	"github.com/zhuangsirui/sirius/http"
 	"github.com/zhuangsirui/sirius/webdav"
 )
@@ -23,7 +23,7 @@ func init() {
 
 	err := config.ParseFile(c)
 	if err != nil {
-		logrus.Panic(err)
+		log.Panic(err)
 	}
 }
 
@@ -41,7 +41,7 @@ func main() {
 	})
 
 	if err := dav.Init(); err != nil {
-		logrus.WithFields(logrus.Fields{
+		log.WithFields(log.Fields{
 			"service": "webdav",
 		}).Panic(err)
 	}

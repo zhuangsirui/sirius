@@ -1,10 +1,8 @@
 [http]
-
 ip = "0.0.0.0"
 port = 8000
 
 [webdav]
-
 prefix = "/dav/"
 root_dir = "/tmp/webdav"
 

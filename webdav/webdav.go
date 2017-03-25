@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 
 	"golang.org/x/net/webdav"
 )
@@ -29,14 +29,12 @@ func NewWebDav(config Config) *WebDav {
 }
 
 func (wd *WebDav) Init() error {
-	logrus.WithFields(logrus.Fields{
-		"service": "webdav",
-	}).Info("init")
+	log.WithFields(log.Fields{
+		"prefix": wd.config.Prefix,
+	}).Info("init webdav")
 
 	if wd.config.Authenticator == nil {
-		logrus.WithFields(logrus.Fields{
-			"service": "webdav",
-		}).Error("webdav init failed, Authenticator not exist")
+		log.Error("webdav init failed, Authenticator not exist")
 		return ErrAuthenticatorNotExist
 	}
 
@@ -53,12 +51,6 @@ func (wd *WebDav) Init() error {
 		}
 		handler, err := wd.ensureHandler(username)
 		if err != nil {
-			logrus.WithFields(logrus.Fields{
-				"service": "webdav",
-				"method":  r.Method,
-				"path":    r.URL.Path,
-				"error":   err,
-			}).Error("Request")
 			w.Header().Set("WWW-Authenticate", `Basic realm="davfs"`)
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
@@ -87,9 +79,8 @@ func (wd *WebDav) ensureHandler(username string) (handler *webdav.Handler, err e
 func (wd *WebDav) initHandler(username string) (*webdav.Handler, error) {
 	userDir, err := wd.ensureUserDir(username)
 	if err != nil {
-		logrus.WithFields(logrus.Fields{
-			"service": "webdav",
-			"error":   err,
+		log.WithFields(log.Fields{
+			"error": err,
 		}).Error("ensure user directory failed")
 		return nil, ErrUserDirInaccessible
 	}
@@ -99,11 +90,8 @@ func (wd *WebDav) initHandler(username string) (*webdav.Handler, error) {
 		FileSystem: fs,
 		LockSystem: webdav.NewMemLS(),
 		Logger: func(r *http.Request, err error) {
-			logrus.WithFields(logrus.Fields{
-				"service": "webdav",
-				"method":  r.Method,
-				"path":    r.URL.Path,
-				"error":   err,
+			log.WithFields(log.Fields{
+				"error": err,
 			}).Info("Request")
 		},
 	}

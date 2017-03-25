@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/Sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 )
 
 type Server struct {
@@ -22,11 +22,10 @@ func NewServer(config Config) *Server {
 }
 
 func (s *Server) Init() {
-	logrus.WithFields(logrus.Fields{
-		"service": "http",
-		"ip":      s.config.IP,
-		"port":    s.config.Port,
-	}).Info("serve")
+	log.WithFields(log.Fields{
+		"ip":   s.config.IP,
+		"port": s.config.Port,
+	}).Info("init http server")
 
 	s.server = &http.Server{
 		Addr:    fmt.Sprintf("%s:%d", s.config.IP, s.config.Port),
@@ -40,17 +39,14 @@ func (s *Server) AddHandlerFunc(path string, handlerFunc http.HandlerFunc) {
 
 func (s *Server) Serve() {
 	if err := s.server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-		logrus.WithFields(logrus.Fields{
-			"service": "http",
-			"ip":      s.config.IP,
-			"port":    s.config.Port,
+		log.WithFields(log.Fields{
+			"ip":   s.config.IP,
+			"port": s.config.Port,
 		}).Info("http server stopped")
 		return
 	}
 
-	logrus.WithFields(logrus.Fields{
-		"service": "web",
-	}).Info("shutdown")
+	log.Info("shutdown")
 	return
 }
 
