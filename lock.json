@@ -1,0 +1,75 @@
+{
+    "memo": "9aa6459322d7f48fdb034d9ec172ee4b61e91cc1428b532dac55341f1d5b386a",
+    "projects": [
+        {
+            "name": "github.com/BurntSushi/toml",
+            "version": "v0.2.0",
+            "revision": "bbd5bb678321a0d6e58f1099321dfa73391c1b6f",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/Sirupsen/logrus",
+            "version": "v0.11.5",
+            "revision": "ba1b36c82c5e05c4f912a88eab0dcd91a171688f",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/gopherjs/gopherjs",
+            "branch": "master",
+            "revision": "0cc212b4ef1943b61e894a7d56490575b3216439",
+            "packages": [
+                "js"
+            ]
+        },
+        {
+            "name": "github.com/jtolds/gls",
+            "version": "v4.2.0",
+            "revision": "8ddce2a84170772b95dd5d576c48d517b22cac63",
+            "packages": [
+                "."
+            ]
+        },
+        {
+            "name": "github.com/smartystreets/assertions",
+            "version": "1.6.0",
+            "revision": "e9a2f6771d97c709b2f7609fdf89ebde8b64c926",
+            "packages": [
+                ".",
+                "internal/go-render/render",
+                "internal/oglematchers"
+            ]
+        },
+        {
+            "name": "github.com/smartystreets/goconvey",
+            "version": "1.6.2",
+            "revision": "d4c757aa9afd1e2fc1832aaab209b5794eb336e1",
+            "packages": [
+                "convey",
+                "convey/gotest",
+                "convey/reporting"
+            ]
+        },
+        {
+            "name": "golang.org/x/net",
+            "branch": "master",
+            "revision": "6c23252515492caf9b228a9d5cabcdbde29f7f82",
+            "packages": [
+                "context",
+                "webdav",
+                "webdav/internal/xml"
+            ]
+        },
+        {
+            "name": "golang.org/x/sys",
+            "branch": "master",
+            "revision": "8fd966b47dbdd4faa03de0d06e3d733baeb9a1a9",
+            "packages": [
+                "unix"
+            ]
+        }
+    ]
+}
